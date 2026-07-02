@@ -2,10 +2,9 @@
 @plugin "../node_modules/daisyui/index.js";
 
 /* Urbanist font */
-@import url('https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400..700&family=Noto+Serif+Bengali:wght@100..900&family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@100..900&display=swap');
 
 body {
   font-family: "Urbanist", sans-serif;
-  background-color: #EAECED;
+
 }

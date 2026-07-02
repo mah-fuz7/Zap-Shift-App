@@ -12,7 +12,7 @@ const Banner = () => {
       infiniteLoop
       showThumbs={false}
       showStatus={false}
-      interval={3000}
+      interval={2500}
       stopOnHover
       swipeable
     >

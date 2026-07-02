@@ -23,7 +23,7 @@ const HowItWorks = () => {
     }
   ];
     return (
-        <div className="bg-gray-100 px-4 py-16 md:px-8 md:py-24">
+        <div className="bg-gray-100 px-4 py-16 md:px-8 md:py-24  my-12.5">
       <div className="max-w-7xl mx-auto">
         {/* Title */}
         <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-12">
