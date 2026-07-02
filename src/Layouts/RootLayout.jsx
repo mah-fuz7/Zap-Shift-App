@@ -1,4 +1,3 @@
-import React from 'react';
 import { Outlet, useNavigation } from 'react-router';
 import Footer from '../Components/Shared/Footer';
 import Navbar from '../Components/Shared/Navbar';
@@ -38,7 +37,11 @@ const RootLayout = () => {
             </main>
 
             {/* Footer */}
-            <Footer />
+            <div className='mx-12.5 my-4'>
+                            <Footer />
+
+            </div>
+
         </div>
 
     );

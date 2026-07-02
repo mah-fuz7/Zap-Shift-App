@@ -1,8 +1,13 @@
+import Banner from "../../Components/ui/Banner";
+import HowItWorks from "../../Components/ui/HowItWorks";
 
 const Home = () => {
     return (
         <div>
-            <h1 className="text-6xl">Home</h1>
+           <div className="mx-12.5">
+             <Banner></Banner>
+           </div>
+           <HowItWorks></HowItWorks>
         </div>
     );
 };
