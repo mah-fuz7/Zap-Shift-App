@@ -17,7 +17,7 @@ const Error = () => {
           Error 404
         </h1>
 
-        <Link to="/" className="btn btn-primary rounded-full px-6">
+        <Link to="/" className="btn btn-primary text-white hover:brightness-110 rounded-full px-6">
           Go Home
         </Link>
       </div>

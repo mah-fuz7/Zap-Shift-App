@@ -1,8 +1,10 @@
 import Banner from "../../Components/ui/Banner";
-import Brands from "../../Components/ui/Brands";
+import FAQ from "../../Components/ui/FAQ";
 import HowItWorks from "../../Components/ui/HowItWorks";
+import Merchant from "../../Components/ui/Merchant";
 import OurServices from "../../Components/ui/OurServices";
 import ServiceFeatures from "../../Components/ui/ServiceFeatures";
+import Brands from "./Brands/Brands";
 
 const Home = () => {
     return (
@@ -13,6 +15,8 @@ const Home = () => {
            <OurServices></OurServices>
            <Brands></Brands>
            <ServiceFeatures></ServiceFeatures>
+           <Merchant></Merchant>
+           <FAQ></FAQ>
                       </div>
 
         </div>

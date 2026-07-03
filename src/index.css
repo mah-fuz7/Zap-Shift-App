@@ -4,7 +4,14 @@
 /* Urbanist font */
 @import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@100..900&display=swap');
 
+@plugin "daisyui/theme" {
+  name: "light";
+  default: true;
+  --color-primary: #CAEB66;
+  --color-secondary: #03373D;
+}
+
+
 body {
   font-family: "Urbanist", sans-serif;
-
 }

@@ -1,4 +1,6 @@
+import { Link } from 'react-router';
 import Logo from '../ui/Logo';
+import { FiArrowUpRight } from 'react-icons/fi';
 
 const Navbar = () => {
     return (
@@ -37,8 +39,14 @@ const Navbar = () => {
       <li><a>Item 3</a></li>
     </ul>
   </div>
-  <div className="navbar-end">
-    <a className="btn">Button</a>
+  <div className="navbar-end flex gap-3">
+<Link to={'/signin'} className='text-gray-500 px-8 py-4 rounded-2xl border-2 border-gray-500 font-semibold hover:bg-primary'>Sign In</Link>
+<Link to={'/signup'} className='  px-4 py-2.5 rounded-2xl  bg-primary  font-semibold hover:brightness-90 transition  flex items-center gap-3  '>Sign Up
+<span className="w-10 h-10 rounded-full bg-slate-900 text-white flex items-center justify-center">
+              <FiArrowUpRight className="text-lg" />
+            </span>
+</Link>
+
   </div>
 </div>
     );
