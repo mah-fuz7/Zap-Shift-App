@@ -5,8 +5,10 @@ import Merchant from "../../Components/ui/Merchant";
 import OurServices from "../../Components/ui/OurServices";
 import ServiceFeatures from "../../Components/ui/ServiceFeatures";
 import Brands from "./Brands/Brands";
+import Review from "./Review/Review";
 
 const Home = () => {
+    
     return (
         <div>
            <div className="mx-12.5 ">
@@ -16,6 +18,7 @@ const Home = () => {
            <Brands></Brands>
            <ServiceFeatures></ServiceFeatures>
            <Merchant></Merchant>
+           <Review></Review>
            <FAQ></FAQ>
                       </div>
 

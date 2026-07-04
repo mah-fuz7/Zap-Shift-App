@@ -4,6 +4,7 @@ import Home from "../Pages/Home/Home";
 import Error from "../Pages/error/Error";
 import SignUp from "../Pages/Auth/SignUp";
 import SignIn from "../Pages/Auth/Signin";
+import Coverage from "../Pages/Home/Coverage/Coverage";
 
 const router = createBrowserRouter([
   {
@@ -14,6 +15,12 @@ const router = createBrowserRouter([
       {
         index:true,
         element:<Home></Home>
+      },
+      {
+        path:'/coverage',
+        element:<Coverage></Coverage>,
+      loader:()=>fetch('../../public/warehouses.json').then(res=>res.json())
+        
       },
      
       

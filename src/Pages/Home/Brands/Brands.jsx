@@ -33,7 +33,7 @@ const Brands = () => {
         </h2>
  
 <Swiper
-slidesPerView={3}
+slidesPerView={4}
         spaceBetween={15}
         freeMode={true}
         pagination={{
@@ -46,7 +46,7 @@ slidesPerView={3}
           disableOnInteraction: false,
         }}
 >
-<div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
+<div className="flex  flex-wrap justify-center items-center gap-8 md:gap-12">
           {brands.map((brand) => (
             <SwiperSlide
               key={brand.id}
@@ -62,7 +62,6 @@ slidesPerView={3}
         </div>
 </Swiper>
 
-        {/* Brands Container - Single Line */}
         
       </div>
     </section>
