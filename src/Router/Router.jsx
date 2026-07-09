@@ -5,6 +5,9 @@ import Error from "../Pages/error/Error";
 import SignUp from "../Pages/Auth/SignUp";
 import SignIn from "../Pages/Auth/Signin";
 import Coverage from "../Pages/Home/Coverage/Coverage";
+import Rider from "../Pages/Rider";
+import AboutUs from "../Pages/AboutUs";
+import SendParcelForm from "../Pages/SendParcelForm";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +23,22 @@ const router = createBrowserRouter([
         path:'/coverage',
         element:<Coverage></Coverage>,
       loader:()=>fetch('../../public/warehouses.json').then(res=>res.json())
+        
+      },
+      {
+        path:'/rider',
+        element:<Rider></Rider>,
+        
+      },
+      {
+        path:'/aboutus',
+        element:<AboutUs></AboutUs>,
+        
+      },
+      {
+        path:'/sendparcel',
+        element:<SendParcelForm></SendParcelForm>,
+        loader:()=>fetch("../../public/warehouses.json").then(res=>res.json())
         
       },
      
