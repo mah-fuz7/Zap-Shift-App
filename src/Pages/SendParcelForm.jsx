@@ -1,5 +1,6 @@
 import { useForm, useWatch } from "react-hook-form";
 import { useLoaderData } from "react-router";
+import Swal from "sweetalert2";
 
 export default function SendParcelForm() {
   const { register, handleSubmit ,control} = useForm({
@@ -20,7 +21,68 @@ export default function SendParcelForm() {
 
   const onSubmit = (data) => {
     console.log(data);
+
+    // pricing
+const isSameCity= data.senderDistrict === data.receiverDistrict
+const isDocument=data.parcelType === 'document'
+const parcelWeight=parseFloat(data.parcelWeight)
+let cost=0
+
+if(isDocument){
+  cost=isSameCity?60 :80;
+}else{
+  if(parcelWeight<=3){
+    cost=isSameCity?110:150;
+  }else{
+    const minCharge=isSameCity?110:150
+    const  xtraWeight=parcelWeight-3
+
+    cost=isSameCity? minCharge+xtraWeight*40 :minCharge+xtraWeight*40+40
+  }
+}
+cost=Math.round(cost)
+Swal.fire({
+  title: "Confirm Delivery",
+  html: `
+    <div class="text-center">
+      <div class="mb-4">
+        <div class="text-4xl mb-3">🚚</div>
+        <p class="text-gray-300 mb-4">Ready to deliver this parcel?</p>
+        <div class="bg-black p-4 rounded-lg">
+          <p class="text-gray-400 text-sm mb-2">Delivery Cost</p>
+          <p class="text-3xl font-bold text-lime-400">৳${cost}</p>
+        </div>
+      </div>
+    </div>
+  `,
+  icon: "question",
+  showCancelButton: true,
+  confirmButtonColor: "#CAEB66",
+  cancelButtonColor: "#6b7280",
+  confirmButtonText: "Yes, Deliver",
+  cancelButtonText: "Cancel",
+  background: "#677E61",
+  color: "#fff",
+  iconColor: "#CAEB66"
+}).then((result) => {
+  if (result.isConfirmed) {
+    Swal.fire({
+      title: "Delivered!",
+      text: `Parcel delivered  at- ৳${cost} `,
+      icon: "success",
+      confirmButtonColor: "#CAEB66",
+      background: "#1a1a2e",
+      color: "#fff",
+      iconColor: "#CAEB66"
+    });
+  }
+});
+console.log(isSameCity,isDocument,cost,parcelWeight)
+
   };
+
+
+
 
   const Data = useLoaderData();
   const DuplicateRegions = Data.map((r) => r.region);
@@ -85,6 +147,7 @@ const receiverRegion=useWatch({control,name:'receiverRegion'})
               </label>
               <input
                 type="number"
+                step="any"
                 placeholder="Parcel Weight (Kg)"
                 {...register("parcelWeight", {
                   required: "Weight is required",
