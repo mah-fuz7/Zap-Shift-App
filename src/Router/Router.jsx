@@ -8,6 +8,12 @@ import Coverage from "../Pages/Home/Coverage/Coverage";
 import Rider from "../Pages/Rider";
 import AboutUs from "../Pages/AboutUs";
 import SendParcelForm from "../Pages/SendParcelForm";
+import DashBordLayout from "../Layouts/DashBordLayout";
+import Dashbord from "../Pages/Dashboard.jsx/Dashbord";
+import MyParcel from "../Pages/Dashboard.jsx/MyParcel";
+import PaymentHistory from "../Pages/Dashboard.jsx/PaymentHistory";
+import CompletedDeliveries from "../Pages/Dashboard.jsx/CompletedDeliveries";
+import AssignedDeliveries from "../Pages/Dashboard.jsx/AssignedDeliveries";
 
 const router = createBrowserRouter([
   {
@@ -46,6 +52,37 @@ const router = createBrowserRouter([
 
     ]
     
+  },
+  {
+path:"/dashboard",
+element:<DashBordLayout></DashBordLayout>,
+children:[
+  {
+    index:true,
+    element:<Dashbord></Dashbord>
+  },
+  {
+    path:'my-parcels',
+    element:<MyParcel></MyParcel>
+  },
+  {
+    path:'payment-history',
+    element:<PaymentHistory></PaymentHistory>
+  },
+  {
+    path:'completed-deliveries',
+    element:<CompletedDeliveries></CompletedDeliveries>
+  },
+  {
+    path:'assigned-deliveries',
+    element:<AssignedDeliveries></AssignedDeliveries>
+  },
+  {
+    path:'coverage',
+    element:<Coverage></Coverage>
+  },
+  
+]
   },
    {
         path:'/signup',

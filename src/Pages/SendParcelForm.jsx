@@ -3,7 +3,7 @@ import { useLoaderData } from "react-router";
 import Swal from "sweetalert2";
 
 export default function SendParcelForm() {
-  const { register, handleSubmit ,control} = useForm({
+  const { register, handleSubmit ,control,reset} = useForm({
     defaultValues: {
       parcelType: "document",
       parcelName: "",
@@ -74,7 +74,10 @@ Swal.fire({
       background: "#1a1a2e",
       color: "#fff",
       iconColor: "#CAEB66"
-    });
+    })
+    .then(() => {
+      reset()
+    }) 
   }
 });
 console.log(isSameCity,isDocument,cost,parcelWeight)

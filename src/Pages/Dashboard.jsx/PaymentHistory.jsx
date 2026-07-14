@@ -1,5 +1,5 @@
 
-const Rider = () => {
+const PaymentHistory = () => {
     return (
         <div>
             
@@ -7,4 +7,4 @@ const Rider = () => {
     );
 };
 
-export default Rider;
+export default PaymentHistory;
