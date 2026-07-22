@@ -7,16 +7,19 @@ import { useForm } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useState } from "react";
 import axios from "axios";
+import { Link, useNavigate } from "react-router";
 
 const SignUp = () => {
+  const navigation=useNavigate()
   const { signInWithGoogle, registerUser,updateUserProfile,setUser,user } = useAuth();
   // password show and hide state
   const [showPassword, setShowPassword] = useState(false);
   // handle google signin
   const handleGoogleSignIn = () => {
-    signInWithGoogle().then(() => {
-      toast.success("google sign in successfully");
-    });
+    signInWithGoogle()
+    .then(() => {
+navigation('/')    
+});
   };
 
   // React hook form
@@ -59,6 +62,8 @@ setUser({
       displayName: data.name,
       photoURL,
     });
+    navigation('/')    
+
 console.log(user)
 
     } catch (error) {
@@ -194,9 +199,9 @@ console.log(user)
           {/* Login */}
           <p className="text-center text-sm text-gray-500 mt-4">
             Already have an account?
-            <a href="/signin" className="text-primary font-semibold ml-1">
+            <Link to={'/login'} className="text-primary font-semibold ml-1">
               Login
-            </a>
+            </Link>
           </p>
 
           {/* Divider */}

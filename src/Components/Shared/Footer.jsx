@@ -5,7 +5,7 @@ import facebook from "../../assets/Social-media-icons/facebook.png"
 import youtube from "../../assets/Social-media-icons/youtube.png"
 const Footer = () => {
     return (
-       <footer className="footer footer-horizontal footer-center bg-black text-primary-content p-10 rounded-4xl">
+       <footer className=" footer footer-horizontal footer-center bg-black text-primary-content p-10 rounded-4xl">
   <aside>
 <Logo className="text-white" />
     <p className="">

@@ -4,7 +4,8 @@ import BgStyle from "../../assets/be-a-merchant-bg.png";
 
 const Merchant = () => {
   return (
-    <section className="max-w-7xl mx-auto px-4 py-20">
+  <div className="px-4 md:px-12 lg:px-16 w-full max-w-7xl mx-auto">
+  <section className="max-w-7xl mx-auto px-4 py-20">
       <div
         className="relative overflow-hidden rounded-3xl bg-[#03373D] px-8 py-14 md:px-14"
         style={{
@@ -57,6 +58,7 @@ const Merchant = () => {
         </div>
       </div>
     </section>
+    </div>
   );
 };
 

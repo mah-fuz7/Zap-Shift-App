@@ -1,8 +1,26 @@
 import authimg from "../../assets/authimage.png";
 import logo from "../../assets/brand.png";
 import { FcGoogle } from "react-icons/fc";
+import { toast } from "react-toastify";
+import useAuth from "../../hooks/useAuth";
+import { useNavigate } from "react-router";
 
 const SignIn = () => {
+  const { signInWithGoogle,login}=useAuth()
+const navigation=useNavigate()
+  // handle google signin
+    const handleGoogleSignIn = () => {
+      signInWithGoogle()
+      .then(() => {
+  navigation('/')
+      });
+    };
+  const handleLogin = ()=>{
+login()
+.then(()=>{
+  navigation('/')
+})
+  }
   return (
     <div className="min-h-screen flex">
       {/* Left Side */}
@@ -65,6 +83,7 @@ const SignIn = () => {
             {/* Login Button */}
             <button
               type="submit"
+              onClick={handleLogin}
               className="w-full h-10 bg-primary text-secondary font-semibold rounded-md hover:opacity-90 transition"
             >
               Login
@@ -90,7 +109,9 @@ const SignIn = () => {
           </div>
 
           {/* Google Login */}
-          <button className="w-full h-10 border border-gray-300 rounded-md flex items-center justify-center gap-3 hover:bg-gray-50 transition">
+          <button           
+           onClick={handleGoogleSignIn}
+ className="w-full h-10 border border-gray-300 rounded-md flex items-center justify-center gap-3 hover:bg-gray-50 transition">
             <FcGoogle className="text-xl" />
             <span className="text-sm font-medium text-gray-700">
               Login with Google

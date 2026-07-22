@@ -1,29 +1,68 @@
-import { useState } from "react";
-import { Outlet, NavLink } from "react-router";
+import { useState, useRef, useEffect } from "react";
+import { Outlet, NavLink, useNavigate } from "react-router";
 import {
   FiHome,
   FiTruck,
   FiCheckCircle,
   FiBox,
   FiCreditCard,
-//   FiMapPin,
+  //   FiMapPin,
   FiSettings,
   FiLock,
   FiHelpCircle,
   FiLogOut,
   FiMenu,
-  FiBell,
-  FiChevronDown,
   FiX,
 } from "react-icons/fi";
 
 import Logo from "../Components/ui/Logo";
+import useAuth from "../hooks/useAuth";
 
 const DashboardLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setProfileDropdownOpen(false);
+      }
+    };
+
+    if (profileDropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }
+  }, [profileDropdownOpen]);
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate("/");
+      setProfileDropdownOpen(false);
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
+  const getInitials = (name) => {
+    if (!name) return "?";
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
   };
 
   return (
@@ -35,7 +74,9 @@ const DashboardLayout = () => {
         } bg-white border-r border-gray-200 flex flex-col transition-all duration-300 ease-in-out`}
       >
         {/* Logo */}
-        <div className={`flex items-center justify-between px-4 py-4 ${!sidebarOpen && "justify-center"}`}>
+        <div
+          className={`flex items-center justify-between px-4 py-4 ${!sidebarOpen && "justify-center"}`}
+        >
           {sidebarOpen && <Logo />}
           <button
             onClick={toggleSidebar}
@@ -204,6 +245,7 @@ const DashboardLayout = () => {
             </NavLink>
 
             <button
+              onClick={handleLogout}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-red-50 hover:text-red-500 transition-all duration-200 ${
                 !sidebarOpen && "justify-center"
               }`}
@@ -219,7 +261,7 @@ const DashboardLayout = () => {
       {/* ================= Right Section ================= */}
       <div className="flex-1 flex flex-col">
         {/* Navbar */}
-        <header className="h-16 bg-white border-b border-gray-200 flex items-center px-8">
+        <header className="h-16 bg-white border-b border-gray-200 flex items-center gap-4 px-8">
           {/* Left */}
           <button
             onClick={toggleSidebar}
@@ -229,23 +271,68 @@ const DashboardLayout = () => {
             <FiMenu />
           </button>
 
-          {/* Right */}
-          <div className="flex items-center gap-6 ml-auto">
-            <button className="relative">
-              <FiBell className="text-xl text-gray-600 hover:text-gray-800 transition-colors" />
-              <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-red-500"></span>
-            </button>
+          <NavLink
+            to="/"
+            className="text-xl text-gray-600 hover:text-gray-800 transition-colors"
+            title="Go to home"
+          >
+            <FiHome />
+          </NavLink>
 
-            <div className="flex items-center gap-3 cursor-pointer hover:bg-gray-50 px-3 py-2 rounded-lg transition-colors">
-              <div className="w-10 h-10 rounded-full bg-gray-300"></div>
+          {/* Right - Profile Dropdown */}
+          <div className="relative ml-auto" ref={dropdownRef}>
+            {user ? (
+              <>
+                <button
+                  onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+                  className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+                  title="Profile menu"
+                >
+                  <div className="w-10 h-10 rounded-full bg-lime-300 flex items-center justify-center text-sm font-semibold text-black border border-gray-200">
+                    {user.photoURL ? (
+                      <img
+                        src={user.photoURL}
+                        alt={user.displayName}
+                        className="w-full h-full rounded-full object-cover"
+                      />
+                    ) : (
+                      getInitials(user.displayName)
+                    )}
+                  </div>
+                </button>
 
-              <div className="leading-4">
-                <h3 className="font-semibold text-sm">Zahid Hossain</h3>
-                <p className="text-xs text-gray-500">Admin</p>
-              </div>
+                {/* Dropdown Menu */}
+                {profileDropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-50 animate-in fade-in duration-200">
+                    {/* User Info */}
+                    <div className="px-4 py-3 border-b border-gray-100">
+                      <p className="text-sm font-semibold text-gray-900">
+                        {user.displayName || "User"}
+                      </p>
+                      <p className="text-xs text-gray-500 truncate">
+                        {user.email}
+                      </p>
+                    </div>
 
-              <FiChevronDown className="text-gray-500" />
-            </div>
+                    {/* Logout */}
+                    <button
+                      onClick={handleLogout}
+                      className="w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors flex items-center gap-2 border-t border-gray-100"
+                    >
+                      <FiLogOut className="text-base" />
+                      <span>Sign Out</span>
+                    </button>
+                  </div>
+                )}
+              </>
+            ) : (
+              <NavLink
+                to="/login"
+                className="px-4 py-2 bg-lime-300 text-black font-medium rounded-lg hover:bg-lime-400 transition-colors text-sm"
+              >
+                Sign In
+              </NavLink>
+            )}
           </div>
         </header>
 

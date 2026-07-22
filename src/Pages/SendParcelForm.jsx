@@ -1,9 +1,11 @@
 import { useForm, useWatch } from "react-hook-form";
 import { useLoaderData } from "react-router";
 import Swal from "sweetalert2";
-
+import useAxios from "../hooks/useAxios";
+import { toast } from "react-toastify";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 export default function SendParcelForm() {
-  const { register, handleSubmit ,control,reset} = useForm({
+  const { register, handleSubmit, control, reset } = useForm({
     defaultValues: {
       parcelType: "document",
       parcelName: "",
@@ -19,31 +21,58 @@ export default function SendParcelForm() {
     },
   });
 
-  const onSubmit = (data) => {
+  const Axios = useAxios();
+
+  // Post the parcel Data using tanStack query
+  const queryClient = useQueryClient();
+
+  const { mutate: addParcel } = useMutation({
+    mutationFn: async (parcelData) => {
+      const res = await Axios.post("/parcels", parcelData);
+      return res.data;
+    },
+    onSuccess: () => {
+      toast.success("parcel added");
+      queryClient.invalidateQueries({
+        queryKey: ["parcels"],
+      });
+      reset();
+    },
+
+    onError: () => {
+      toast.error("faild to add parcel");
+    },
+  });
+
+  const onSubmit = async(data) => {
     console.log(data);
 
     // pricing
-const isSameCity= data.senderDistrict === data.receiverDistrict
-const isDocument=data.parcelType === 'document'
-const parcelWeight=parseFloat(data.parcelWeight)
-let cost=0
+    const isSameCity = data.senderDistrict === data.receiverDistrict;
+    const isDocument = data.parcelType === "document";
+    const parcelWeight = parseFloat(data.parcelWeight);
+    let cost = 0;
 
-if(isDocument){
-  cost=isSameCity?60 :80;
-}else{
-  if(parcelWeight<=3){
-    cost=isSameCity?110:150;
-  }else{
-    const minCharge=isSameCity?110:150
-    const  xtraWeight=parcelWeight-3
+    if (isDocument) {
+      cost = isSameCity ? 60 : 80;
+    } else {
+      if (parcelWeight <= 3) {
+        cost = isSameCity ? 110 : 150;
+      } else {
+        const minCharge = isSameCity ? 110 : 150;
+        const xtraWeight = parcelWeight - 3;
 
-    cost=isSameCity? minCharge+xtraWeight*40 :minCharge+xtraWeight*40+40
-  }
-}
-cost=Math.round(cost)
-Swal.fire({
-  title: "Confirm Delivery",
-  html: `
+        cost = isSameCity
+          ? minCharge + xtraWeight * 40
+          : minCharge + xtraWeight * 40 + 40;
+      }
+    }
+
+    cost = Math.round(cost);
+    
+    const result=await Swal.fire({
+      title: "Confirm Delivery",
+      html: `
     <div class="text-center">
       <div class="mb-4">
         <div class="text-4xl mb-3">🚚</div>
@@ -55,50 +84,51 @@ Swal.fire({
       </div>
     </div>
   `,
-  icon: "question",
-  showCancelButton: true,
-  confirmButtonColor: "#CAEB66",
-  cancelButtonColor: "#6b7280",
-  confirmButtonText: "Yes, Deliver",
-  cancelButtonText: "Cancel",
-  background: "#677E61",
-  color: "#fff",
-  iconColor: "#CAEB66"
-}).then((result) => {
-  if (result.isConfirmed) {
-    Swal.fire({
-      title: "Delivered!",
-      text: `Parcel delivered  at- ৳${cost} `,
-      icon: "success",
+      icon: "question",
+      showCancelButton: true,
       confirmButtonColor: "#CAEB66",
-      background: "#1a1a2e",
+      cancelButtonColor: "#6b7280",
+      confirmButtonText: "Yes, Deliver",
+      cancelButtonText: "Cancel",
+      background: "#677E61",
       color: "#fff",
-      iconColor: "#CAEB66"
+      iconColor: "#CAEB66",
     })
-    .then(() => {
-      reset()
-    }) 
-  }
-});
-console.log(isSameCity,isDocument,cost,parcelWeight)
+    
+      if (result.isConfirmed) {
+        await addParcel(data);
 
+        Swal.fire({
+          title: "Delivered!",
+          text: `Parcel delivered  at- ৳${cost} `,
+          icon: "success",
+          confirmButtonColor: "#CAEB66",
+          background: "#1a1a2e",
+          color: "#fff",
+          iconColor: "#CAEB66",
+        })
+        
+      }
+    
+             
+
+     
+
+    console.log(isSameCity, isDocument, cost, parcelWeight);
   };
-
-
-
 
   const Data = useLoaderData();
   const DuplicateRegions = Data.map((r) => r.region);
   const region = [...new Set(DuplicateRegions)];
-// watch the data
-const senderRegion=useWatch({control,name:'senderRegion'})
-const receiverRegion=useWatch({control,name:'receiverRegion'})
+  // watch the data
+  const senderRegion = useWatch({ control, name: "senderRegion" });
+  const receiverRegion = useWatch({ control, name: "receiverRegion" });
 
-  const districsByRegion =(region)=>{
-    const regionDistrict=Data.filter(w=>w.region === region)
-    const districts=regionDistrict.map(d=>d.district)
-    return districts
-  }
+  const districsByRegion = (region) => {
+    const regionDistrict = Data.filter((w) => w.region === region);
+    const districts = regionDistrict.map((d) => d.district);
+    return districts;
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
@@ -217,10 +247,10 @@ const receiverRegion=useWatch({control,name:'receiverRegion'})
                       </option>
                     ))}
                   </select>
-                   <label className="block text-sm font-medium text-gray-700 my-2">
+                  <label className="block text-sm font-medium text-gray-700 my-2">
                     Sender District
                   </label>
-                                    {/* District */}
+                  {/* District */}
 
                   <select
                     defaultValue=""
@@ -233,9 +263,11 @@ const receiverRegion=useWatch({control,name:'receiverRegion'})
                       Select Sender District
                     </option>
 
-                   {
-                    districsByRegion(senderRegion).map((r,i)=><option key={i} value={r}>{r}</option>)
-                   }
+                    {districsByRegion(senderRegion).map((r, i) => (
+                      <option key={i} value={r}>
+                        {r}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 <div>
@@ -321,9 +353,11 @@ const receiverRegion=useWatch({control,name:'receiverRegion'})
                     <option value="" disabled>
                       Select Sender District
                     </option>
-                    {
-                      districsByRegion(receiverRegion).map((district,i)=><option key={i} value={district}>{district}</option>)
-                    }
+                    {districsByRegion(receiverRegion).map((district, i) => (
+                      <option key={i} value={district}>
+                        {district}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 <div>
