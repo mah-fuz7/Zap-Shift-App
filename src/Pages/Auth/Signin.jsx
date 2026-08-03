@@ -1,20 +1,37 @@
 import authimg from "../../assets/authimage.png";
 import logo from "../../assets/brand.png";
 import { FcGoogle } from "react-icons/fc";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 import useAuth from "../../hooks/useAuth";
 import { useNavigate } from "react-router";
+import useAxios from "../../hooks/useAxios";
 
 const SignIn = () => {
   const { signInWithGoogle,login}=useAuth()
 const navigation=useNavigate()
+const axiosSecure=useAxios()
   // handle google signin
-    const handleGoogleSignIn = () => {
-      signInWithGoogle()
-      .then(() => {
-  navigation('/')
-      });
-    };
+  const handleGoogleSignIn = () => {
+  signInWithGoogle()
+    .then(async (result) => {
+      const userInfo = {
+        userName: result.user.displayName,
+        email: result.user.email,
+        photoURL: result.user.photoURL,
+      };
+
+      try {
+        const res = await axiosSecure.post("/users", userInfo);
+        console.log(res.data);
+        navigation("/");
+      } catch (error) {
+        console.error(error);
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};
   const handleLogin = ()=>{
 login()
 .then(()=>{

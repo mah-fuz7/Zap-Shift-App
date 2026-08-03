@@ -96,7 +96,14 @@ export default function SendParcelForm() {
     })
     
       if (result.isConfirmed) {
-        await addParcel(data);
+        // send the cost data of this parcel
+        const parcelDataWithCost={
+          ...data,
+          cost,
+          paymentStatus:"Unpaid",
+          deliveryStatus:'waiting-pickup'
+        }
+        await addParcel(parcelDataWithCost);
 
         Swal.fire({
           title: "Delivered!",

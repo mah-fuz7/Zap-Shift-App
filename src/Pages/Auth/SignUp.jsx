@@ -2,25 +2,43 @@ import authimg from "../../assets/authimage.png";
 import logo from "../../assets/brand.png";
 import { FcGoogle } from "react-icons/fc";
 import useAuth from "../../hooks/useAuth";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useState } from "react";
-import axios from "axios";
+// import axios from "axios";
 import { Link, useNavigate } from "react-router";
+import useAxios from "../../hooks/useAxios";
 
 const SignUp = () => {
+  const axiosSecure=useAxios()
   const navigation=useNavigate()
-  const { signInWithGoogle, registerUser,updateUserProfile,setUser,user } = useAuth();
+  const { signInWithGoogle, registerUser,updateUserProfile,setUser } = useAuth();
   // password show and hide state
   const [showPassword, setShowPassword] = useState(false);
+ 
   // handle google signin
-  const handleGoogleSignIn = () => {
-    signInWithGoogle()
-    .then(() => {
-navigation('/')    
-});
-  };
+ const handleGoogleSignIn = () => {
+  signInWithGoogle()
+    .then(async (result) => {
+      const userInfo = {
+        userName: result.user.displayName,
+        email: result.user.email,
+        photoURL: result.user.photoURL,
+      };
+
+      try {
+        const res = await axiosSecure.post("/users", userInfo);
+        console.log(res.data);
+        navigation("/");
+      } catch (error) {
+        console.error(error);
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};
 
   // React hook form
   const {
@@ -40,15 +58,25 @@ navigation('/')
 // Upload image
 const formData=new FormData();
 formData.append("image",data.photo[0])
-const imageRes=await axios.post(imageUploadURL,formData);
+const imageRes=await axiosSecure.post(imageUploadURL,formData);
 const photoURL=imageRes.data.data.display_url
-console.log(photoURL)
+// console.log(photoURL)
 
 
 // create firebase user
 const result=await registerUser(data.email, data.password)
-console.log(result)
+// console.log(result)
       
+// create UserInfo Data
+const userInfo={
+  UserName:data.name,
+  email:data.email,
+  photoURL:photoURL,
+  
+}
+// store User In Database
+axiosSecure.post('/users',userInfo)
+
 // update firebase profile
 
 await updateUserProfile({
@@ -64,7 +92,7 @@ setUser({
     });
     navigation('/')    
 
-console.log(user)
+// console.log(user)
 
     } catch (error) {
       console.log(error)

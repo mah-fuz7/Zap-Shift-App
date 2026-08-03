@@ -16,6 +16,8 @@ import CompletedDeliveries from "../Pages/Dashboard/CompletedDeliveries";
 import AssignedDeliveries from "../Pages/Dashboard/AssignedDeliveries";
 import TrackOrder from "../Pages/TrackOrder";
 import Pricing from "../Pages/Pricing";
+import SuccessPayment from "../Pages/Dashboard/Payment/SuccessPayment";
+import CancelPayment from "../Pages/Dashboard/Payment/CancelPayment";
 
 const router = createBrowserRouter([
   {
@@ -94,7 +96,14 @@ children:[
     path:'coverage',
     element:<Coverage></Coverage>
   },
-  
+  {
+       path:'success-payment',
+        element:<SuccessPayment></SuccessPayment>
+      },
+      {
+       path:'cancel-payment',
+        element:<CancelPayment></CancelPayment>
+      }
 ]
   },
    {
@@ -105,6 +114,7 @@ children:[
        path:'/login',
         element:<SignIn></SignIn>
       },
+      
   
 ]);
 export default router
