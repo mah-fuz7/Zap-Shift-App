@@ -18,6 +18,7 @@ import TrackOrder from "../Pages/TrackOrder";
 import Pricing from "../Pages/Pricing";
 import SuccessPayment from "../Pages/Dashboard/Payment/SuccessPayment";
 import CancelPayment from "../Pages/Dashboard/Payment/CancelPayment";
+import RiderAssign from "../Pages/Dashboard/RiderAssign";
 
 const router = createBrowserRouter([
   {
@@ -55,6 +56,7 @@ const router = createBrowserRouter([
         element:<Pricing></Pricing>,
         
       },
+    
      
       {
         path:'/sendparcel',
@@ -93,8 +95,8 @@ children:[
     element:<AssignedDeliveries></AssignedDeliveries>
   },
   {
-    path:'coverage',
-    element:<Coverage></Coverage>
+    path:'rider-assign',
+    element:<RiderAssign></RiderAssign>
   },
   {
        path:'success-payment',

@@ -6,13 +6,13 @@ import {
   FiCheckCircle,
   FiBox,
   FiCreditCard,
-  //   FiMapPin,
   FiSettings,
   FiLock,
   FiHelpCircle,
   FiLogOut,
   FiMenu,
   FiX,
+  // FiBike  ,
 } from "react-icons/fi";
 
 import Logo from "../Components/ui/Logo";
@@ -175,8 +175,8 @@ const DashboardLayout = () => {
               {sidebarOpen && <span>Payment History</span>}
             </NavLink>
 
-            {/* <NavLink
-              to="/dashboard/coverage"
+            <NavLink
+              to="/dashboard/rider-assign"
               className={({ isActive }) =>
                 `flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 whitespace-nowrap ${
                   isActive
@@ -184,11 +184,12 @@ const DashboardLayout = () => {
                     : "text-gray-600 hover:bg-gray-100"
                 } ${!sidebarOpen && "justify-center"}`
               }
-              title={!sidebarOpen ? "Coverage Area" : ""}
+              title={!sidebarOpen ? "Rider Assign" : ""}
             >
-              <FiMapPin className="text-lg flex-shrink-0" />
-              {sidebarOpen && <span>Coverage Area</span>}
-            </NavLink> */}
+                            <FiTruck className="text-lg flex-shrink-0" />
+
+              {sidebarOpen && <span>🚴Rider Assign</span>}
+            </NavLink>
           </nav>
 
           {/* General */}
@@ -311,7 +312,9 @@ const DashboardLayout = () => {
                       </p>
                       <p className="text-xs text-gray-500 truncate">
                         {user.email}
+                     
                       </p>
+                     
                     </div>
 
                     {/* Logout */}
